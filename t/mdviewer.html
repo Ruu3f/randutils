@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Markdown Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@12.1.0/dist/markdown-it.min.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300&display=swap");
+
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        background-color: #0d1117;
+        margin: 0;
+        padding: 0;
+      }
+
+      h2 {
+        color: #c9d1d9;
+      }
+
+      .container {
+        display: flex;
+        height: 100vh;
+      }
+
+      .markdown {
+        flex: 1;
+        padding: 20px;
+        background-color: #161b22;
+      }
+
+      textarea,
+      .markdown-content {
+        width: 97.3%;
+        height: 85%;
+        border: none;
+        outline: none;
+        padding: 10px;
+        resize: none;
+        background-color: #0d1117;
+        color: #c9d1d9;
+      }
+
+      .markdown-content {
+        border: none;
+        position: fixed;
+        overflow: scroll;
+        height: 80.5%;
+      }
+
+      ::-webkit-scrollbar {
+        background-color: #111;
+        height: 10px;
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: #333;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="markdown">
+        <h2>Input</h2>
+        <hr>
+        <textarea id="markdown-input" rows="20" cols="40" placeholder="..." oninput="renderMarkdown()"></textarea>
+      </div>
+      <div class="markdown">
+        <h2>Output</h2>
+        <hr>
+        <div class="markdown-content"></div>
+      </div>
+    </div>
+    <script>
+      function renderMarkdown() {
+        const markdownInput = document.getElementById('markdown-input').value;
+        const markdownOutput = document.querySelector('.markdown-content');
+        const md = window.markdownit();
+        const markdownHTML = md.render(markdownInput);
+        markdownOutput.innerHTML = markdownHTML;
+      }
+      renderMarkdown();
+    </script>
+  </body>
+</html>

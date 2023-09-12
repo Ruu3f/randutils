@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Link Shortener</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+
+      * {
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background-color: #121212;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #fff;
+      }
+
+      a {
+        color: #ADD8E6;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      input[type="text"],
+      button[type="submit"] {
+        height: 40px;
+        padding: 5px;
+        font-size: 16px;
+        outline: none;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 6px #333333;
+      }
+
+      input[type="text"] {
+        width: 75%;
+        border-radius: 4px;
+        border: none;
+        background-color: #333;
+        color: #fff;
+      }
+
+      button[type="submit"] {
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 20%;
+        height: 48px;
+      }
+
+      .container {
+        max-width: 400px;
+        width: 360px;
+        padding: 20px;
+        background-color: #1F1F1F;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px #00000033;
+      }
+
+      .result-container {
+        text-align: center;
+        margin-top: 20px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Link Shortener</h1>
+      <form>
+        <input type="text" placeholder="Enter a link..." required>
+        <button type="submit">Shorten</button>
+      </form>
+      <div class="result-container">
+        <a class="short-link" target="_blank"></a>
+      </div>
+    </div>
+    <script>
+      document.querySelector("form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        var urlInput = document.querySelector("input[type='text']").value.trim();
+        if (!urlInput.match(/^(http:\/\/|https:\/\/)/)) {
+          showError("Invalid URL format.");
+          return;
+        }
+        var apiUrl = `https://api.shrtco.de/v2/shorten?url=${encodeURIComponent(urlInput)}`;
+        fetch(apiUrl).then(response => response.json()).then(data => {
+          var shortLinkElement = document.querySelector(".short-link");
+          shortLinkElement.href = data.result.full_short_link2;
+          shortLinkElement.innerText = data.result.short_link2;
+          showResult();
+        }).catch(error => {
+          showError("An error occurred while shortening the URL.");
+        }).finally(() => {
+          document.querySelector("input[type='text']").value = "";
+        });
+      });
+
+      function showResult() {
+        document.querySelector(".result-container").style.display = "block";
+      }
+
+      function showError(message) {
+        var shortLinkElement = document.querySelector(".short-link");
+        shortLinkElement.innerText = message;
+        showResult();
+      }
+    </script>
+  </body>
+</html>
